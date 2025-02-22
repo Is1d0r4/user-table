@@ -1,11 +1,34 @@
-import { Component } from '@angular/core';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { UserService } from '../../state/users.service';
 
 @Component({
   selector: 'app-users-modal',
+  templateUrl: 'users-modal.component.html',
   standalone: true,
-  imports: [MatButtonToggleModule],
-  templateUrl: './users-modal.component.html',
-  styleUrl: './users-modal.component.scss',
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [],
 })
-export class UsersModalComponent {}
+export class UsersModalComponent {
+  name?: string;
+  readonly modal = inject(MatDialogRef<UsersModalComponent>);
+
+  constructor(private userService: UserService) {}
+
+  onUserCreate(): void {
+    if (this.name) {
+      this.userService.addUser(this.name);
+    }
+  }
+}
