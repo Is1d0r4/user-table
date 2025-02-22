@@ -1,26 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../user.model';
+import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { UserQuery } from '../../state/users.query';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-users-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, MatTableModule, MatSlideToggleModule],
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.scss',
 })
-export class UsersTableComponent {
-  users: Array<User> = [
-    { id: 1, name: 'John', active: true },
-    { id: 2, name: 'Isidora', active: false },
-  ];
+export class UsersTableComponent implements OnInit {
+  tableDisplayedColumns: string[] = ['userId', 'name', 'status'];
+  tableDataSource = new MatTableDataSource<User>();
+  users$?: Observable<User[]>;
 
-  toggleActive(user: User): void {
-    user.active = !user.active;
+  constructor(private userQuery: UserQuery) {}
+
+  ngOnInit(): void {
+    this.users$ = this.userQuery.selectAll();
+    this.users$.subscribe((users) => {
+      this.tableDataSource.data = users;
+    });
   }
 
-  onAddUser(): void {
-    //openModal
-    this.users.push({ id: this.users.length + 1, name: 'New User' });
-  }
+  onToggleActive(user: User): void {}
+
+  onAddUser(): void {}
 }
