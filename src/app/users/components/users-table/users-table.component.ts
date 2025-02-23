@@ -37,19 +37,8 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.users$ = this.userQuery.selectAll();
 
-    //Disabling Add User button
-    this.isDisabled$ = this.userQuery
-      .selectAll()
-      .pipe(
-        map((users) => users.length >= 5 || users.some((user) => !user.active))
-      );
-
-    //Filling table data
-    this.subscription?.add(
-      this.users$.subscribe((users) => {
-        this.tableDataSource.data = users;
-      })
-    );
+    this.fillTableData();
+    this.setDisabledBtnState();
   }
 
   ngOnDestroy(): void {
@@ -62,5 +51,21 @@ export class UsersTableComponent implements OnInit, OnDestroy {
 
   onOpenModal(): void {
     this.modal.open(UsersModalComponent);
+  }
+
+  fillTableData(): void {
+    this.subscription?.add(
+      this.users$?.subscribe((users) => {
+        this.tableDataSource.data = users;
+      })
+    );
+  }
+
+  setDisabledBtnState(): void {
+    this.isDisabled$ = this.userQuery
+      .selectAll()
+      .pipe(
+        map((users) => users.length >= 5 || users.some((user) => !user.active))
+      );
   }
 }

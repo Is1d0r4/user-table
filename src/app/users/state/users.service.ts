@@ -2,10 +2,12 @@
 import { Injectable } from '@angular/core';
 import { UserStore } from './users.store';
 import { User } from '../user.model';
+import { map, Observable, switchMap, take, timer } from 'rxjs';
+import { UserQuery } from './users.query';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  constructor(private userStore: UserStore) {}
+  constructor(private userStore: UserStore, private userQuery: UserQuery) {}
 
   addUser(username: string) {
     const newUser: User = {
@@ -21,5 +23,16 @@ export class UserService {
       ...user,
       active: !user.active,
     }));
+  }
+
+  fetchUserNames(): Observable<string[]> {
+    return timer(500).pipe(
+      switchMap(() =>
+        this.userQuery.selectAll().pipe(
+          take(1),
+          map((users) => users.map((user) => user.name))
+        )
+      )
+    );
   }
 }
