@@ -28,9 +28,9 @@ export class UsersTableComponent implements OnInit, OnDestroy {
 
   tableDisplayedColumns: string[] = ['userId', 'name', 'active'];
   tableDataSource = new MatTableDataSource<User>();
-  users$?: Observable<User[]>;
-  subscription?: Subscription = new Subscription();
-  isDisabled$?: Observable<boolean>;
+  users$: Observable<User[]> = new Observable();
+  isDisabled$: Observable<boolean> = new Observable();
+  subscription: Subscription = new Subscription();
 
   constructor(private userQuery: UserQuery, private userService: UserService) {}
 
@@ -42,7 +42,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   onToggleActive(user: User): void {
@@ -54,8 +54,8 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   }
 
   fillTableData(): void {
-    this.subscription?.add(
-      this.users$?.subscribe((users) => {
+    this.subscription.add(
+      this.users$.subscribe((users) => {
         this.tableDataSource.data = users;
       })
     );

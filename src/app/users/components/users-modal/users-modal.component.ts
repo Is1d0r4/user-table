@@ -29,8 +29,8 @@ import { CustomValidators } from '../../shared/validators/custom.validators';
   animations: [],
 })
 export class UsersModalComponent {
-  nameForm!: FormGroup;
   readonly modal = inject(MatDialogRef<UsersModalComponent>);
+  nameForm: FormGroup = new FormGroup({});
 
   constructor(private userService: UserService, private fb: FormBuilder) {
     this.createUsernameForm();
