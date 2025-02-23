@@ -1,4 +1,3 @@
-// src/app/state/user.service.ts
 import { Injectable } from '@angular/core';
 import { UserStore } from './users.store';
 import { User } from '../user.model';
@@ -26,7 +25,8 @@ export class UserService {
   }
 
   fetchUserNames(): Observable<string[]> {
-    return timer(500).pipe(
+    const DELAY = 500;
+    return timer(DELAY).pipe(
       switchMap(() =>
         this.userQuery.selectAll().pipe(
           take(1),

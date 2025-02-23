@@ -23,11 +23,7 @@
   <tr mat-row *matRowDef="let row; columns: tableDisplayedColumns"></tr>
 </table>
 <div class="add-btn-wrapper">
-  <button
-    mat-raised-button
-    (click)="onOpenModal()"
-    [disabled]="isDisabled$ | async"
-  >
+  <button mat-raised-button (click)="onOpenModal()" [disabled]="isBtnDisabled">
     Add User
   </button>
 </div>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../user.model';
-import { map, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { UserQuery } from '../../state/users.query';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -29,16 +29,16 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   tableDisplayedColumns: string[] = ['userId', 'name', 'active'];
   tableDataSource = new MatTableDataSource<User>();
   users$: Observable<User[]> = new Observable();
-  isDisabled$: Observable<boolean> = new Observable();
+  isBtnDisabled: boolean = true;
   subscription: Subscription = new Subscription();
 
   constructor(private userQuery: UserQuery, private userService: UserService) {}
 
   ngOnInit(): void {
     this.users$ = this.userQuery.selectAll();
-
-    this.fillTableData();
-    this.setDisabledBtnState();
+    this.subscription = this.users$.subscribe((users) =>
+      this.setTableState(users)
+    );
   }
 
   ngOnDestroy(): void {
@@ -53,19 +53,9 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     this.modal.open(UsersModalComponent);
   }
 
-  fillTableData(): void {
-    this.subscription.add(
-      this.users$.subscribe((users) => {
-        this.tableDataSource.data = users;
-      })
-    );
-  }
-
-  setDisabledBtnState(): void {
-    this.isDisabled$ = this.userQuery
-      .selectAll()
-      .pipe(
-        map((users) => users.length >= 5 || users.some((user) => !user.active))
-      );
+  setTableState(users: User[]): void {
+    this.isBtnDisabled =
+      users.length >= 5 || users.some((user) => !user.active);
+    this.tableDataSource.data = users;
   }
 }
