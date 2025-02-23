@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../user.model';
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { UserQuery } from '../../state/users.query';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -26,19 +26,28 @@ import { UsersModalComponent } from '../users-modal/users-modal.component';
 export class UsersTableComponent implements OnInit, OnDestroy {
   readonly modal = inject(MatDialog);
 
-  tableDisplayedColumns: string[] = ['userId', 'name', 'status'];
+  tableDisplayedColumns: string[] = ['userId', 'name', 'active'];
   tableDataSource = new MatTableDataSource<User>();
   users$?: Observable<User[]>;
   subscription?: Subscription = new Subscription();
+  isDisabled$?: Observable<boolean>;
 
   constructor(private userQuery: UserQuery, private userService: UserService) {}
 
   ngOnInit(): void {
     this.users$ = this.userQuery.selectAll();
+
+    //Disabling Add User button
+    this.isDisabled$ = this.userQuery
+      .selectAll()
+      .pipe(
+        map((users) => users.length >= 5 || users.some((user) => !user.active))
+      );
+
+    //Filling table data
     this.subscription?.add(
       this.users$.subscribe((users) => {
         this.tableDataSource.data = users;
-        console.log(users);
       })
     );
   }
@@ -48,7 +57,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   }
 
   onToggleActive(user: User): void {
-    this.userService.toggleUserStatus(user.id);
+    this.userService.toggleUserActivity(user.id);
   }
 
   onOpenModal(): void {

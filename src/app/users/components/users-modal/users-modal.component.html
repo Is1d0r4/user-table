@@ -1,13 +1,11 @@
-<h2 mat-dialog-title>Hi</h2>
+<h2 mat-dialog-title>Hi!</h2>
 <mat-dialog-content>
   <p>Please enter your username:</p>
   <mat-form-field>
     <mat-label>Username</mat-label>
-    <input matInput />
+    <input matInput [(ngModel)]="name" />
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="onUserCreate()" cdkFocusInitial>
-    Create
-  </button>
+  <button mat-button (click)="onUserCreate()" cdkFocusInitial>Create</button>
 </mat-dialog-actions>

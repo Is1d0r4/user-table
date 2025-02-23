@@ -30,5 +30,6 @@ export class UsersModalComponent {
     if (this.name) {
       this.userService.addUser(this.name);
     }
+    this.modal.close();
   }
 }

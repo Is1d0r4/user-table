@@ -4,3 +4,18 @@
     justify-content: center;
     align-items: center;
 }
+
+//override the default color of the material slide toggle component
+.mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: rgb(0, 171, 0);
+    --mdc-switch-selected-handle-color: rgb(0, 171, 0);
+    --mdc-switch-selected-hover-state-layer-color: rgb(0, 171, 0);
+    --mdc-switch-selected-pressed-state-layer-color: rgb(0, 171, 0);
+    --mdc-switch-selected-focus-handle-color: green;
+    --mdc-switch-selected-hover-handle-color: green;
+    --mdc-switch-selected-pressed-handle-color: green;
+    --mdc-switch-selected-focus-track-color: #86db7b;
+    --mdc-switch-selected-hover-track-color: #86db7b;
+    --mdc-switch-selected-pressed-track-color: #86db7b;
+    --mdc-switch-selected-track-color: #86db7b;
+}

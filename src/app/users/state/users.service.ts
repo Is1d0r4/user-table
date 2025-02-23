@@ -16,7 +16,7 @@ export class UserService {
     this.userStore.add(newUser);
   }
 
-  toggleUserStatus(id: number) {
+  toggleUserActivity(id: number) {
     this.userStore.update(id, (user) => ({
       ...user,
       active: !user.active,
