@@ -1,1 +1,1 @@
-export type User = { id: number; name: string; active?: boolean };
+export type User = { id: number; name: string; active: boolean };
