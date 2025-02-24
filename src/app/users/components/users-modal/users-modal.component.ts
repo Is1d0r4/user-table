@@ -55,8 +55,8 @@ export class UsersModalComponent {
   }
 
   onSubmit(): void {
-    if (this.nameForm?.valid) {
-      this.userService.addUser(this.nameForm?.value.name);
+    if (this.nameForm.valid) {
+      this.userService.addUser(this.nameForm.value.name);
     }
     this.modal.close();
   }
