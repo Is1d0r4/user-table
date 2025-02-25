@@ -6,6 +6,8 @@ import { UserQuery } from './users.query';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  users$: Observable<User[]> = this.userQuery.selectAll();
+
   constructor(private userStore: UserStore, private userQuery: UserQuery) {}
 
   addUser(username: string) {
@@ -25,10 +27,10 @@ export class UserService {
   }
 
   fetchUserNames(): Observable<string[]> {
-    const DELAY = 500;
+    const DELAY = 1000;
     return timer(DELAY).pipe(
       switchMap(() =>
-        this.userQuery.selectAll().pipe(
+        this.users$.pipe(
           take(1),
           map((users) => users.map((user) => user.name))
         )

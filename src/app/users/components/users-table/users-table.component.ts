@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../user.model';
-import { Observable, Subscription } from 'rxjs';
-import { UserQuery } from '../../state/users.query';
+import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,15 +27,13 @@ export class UsersTableComponent implements OnInit, OnDestroy {
 
   tableDisplayedColumns: string[] = ['userId', 'name', 'active'];
   tableDataSource = new MatTableDataSource<User>();
-  users$: Observable<User[]> = new Observable();
   isBtnDisabled: boolean = true;
   subscription: Subscription = new Subscription();
 
-  constructor(private userQuery: UserQuery, private userService: UserService) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.users$ = this.userQuery.selectAll();
-    this.subscription = this.users$.subscribe((users) =>
+    this.subscription = this.userService.users$.subscribe((users) =>
       this.setTableState(users)
     );
   }

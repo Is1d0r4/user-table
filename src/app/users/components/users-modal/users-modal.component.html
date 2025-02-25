@@ -1,25 +1,27 @@
 <h2 mat-dialog-title>Hi!</h2>
-<form [formGroup]="nameForm" (ngSubmit)="onSubmit()">
-  <mat-dialog-content>
-    <p>Please enter your username:</p>
-    <mat-form-field>
-      <mat-label>Username</mat-label>
-      <input matInput formControlName="name" />
-      <mat-error *ngIf="nameForm.get('name')?.hasError('required')">
-        Username is required.
-      </mat-error>
-      <mat-error *ngIf="nameForm.get('name')?.hasError('usernameTaken')">
-        This username is already taken.
-      </mat-error>
-    </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button
-      mat-button
-      type="submit"
-      [disabled]="nameForm.invalid || nameForm.pending"
-    >
-      Create
-    </button>
-  </mat-dialog-actions>
-</form>
+<mat-dialog-content>
+  <p>Please enter your username:</p>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input
+      matInput
+      [formControl]="nameInput"
+      [errorStateMatcher]="customMatcher"
+    />
+    <mat-error *ngIf="nameInput.hasError('required')">
+      Username is required.
+    </mat-error>
+    <mat-error *ngIf="nameInput.hasError('usernameTaken')">
+      This username is already taken.
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-button
+    (click)="onSubmit()"
+    [disabled]="nameInput.invalid || nameInput.pending"
+  >
+    Create
+  </button>
+</mat-dialog-actions>
